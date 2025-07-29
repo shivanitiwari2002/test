@@ -1,0 +1,163 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 3.20.0
+    app.quarkus.io/commit-id: 4f707a11e61c420b56728a2c3f8a4d4d10ff26e1
+    app.quarkus.io/vcs-uri: https://github.ibm.com/SystemsDevOpsSolutions/BrIX-service.git
+    app.quarkus.io/build-timestamp: 2025-07-21 - 06:43:45 +0000
+  labels:
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: brix-common
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  type: ClusterIP
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: openjdk-17
+spec:
+  dockerImageRepository: registry.access.redhat.com/ubi9/openjdk-17
+  lookupPolicy:
+    local: true
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 3.20.0
+    app.quarkus.io/commit-id: 4f707a11e61c420b56728a2c3f8a4d4d10ff26e1
+    app.quarkus.io/vcs-uri: https://github.ibm.com/SystemsDevOpsSolutions/BrIX-service.git
+    app.quarkus.io/build-timestamp: 2025-07-21 - 06:43:45 +0000
+  labels:
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: brix-common
+spec:
+  lookupPolicy:
+    local: true
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 3.20.0
+    app.quarkus.io/commit-id: 4f707a11e61c420b56728a2c3f8a4d4d10ff26e1
+    app.quarkus.io/vcs-uri: https://github.ibm.com/SystemsDevOpsSolutions/BrIX-service.git
+    app.quarkus.io/build-timestamp: 2025-07-21 - 06:43:45 +0000
+  labels:
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+  name: brix-common
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: brix-common:1.0.0-SNAPSHOT
+  source:
+    binary: {}
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: openjdk-17:1.21
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/vcs-uri: <<unknown>>
+    app.quarkus.io/quarkus-version: 3.20.0
+    app.quarkus.io/commit-id: 4f707a11e61c420b56728a2c3f8a4d4d10ff26e1
+    app.quarkus.io/vcs-uri: https://github.ibm.com/SystemsDevOpsSolutions/BrIX-service.git
+    app.quarkus.io/build-timestamp: 2025-07-21 - 06:43:45 +0000
+  labels:
+    app.kubernetes.io/managed-by: quarkus
+    app.openshift.io/runtime: quarkus
+    app.kubernetes.io/name: brix-common
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: brix-common
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: brix-common
+      app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+        app.openshift.io/vcs-uri: <<unknown>>
+        app.quarkus.io/quarkus-version: 3.20.0
+        app.quarkus.io/commit-id: 4f707a11e61c420b56728a2c3f8a4d4d10ff26e1
+        app.quarkus.io/vcs-uri: https://github.ibm.com/SystemsDevOpsSolutions/BrIX-service.git
+        app.quarkus.io/build-timestamp: 2025-07-21 - 06:43:45 +0000
+      labels:
+        app.kubernetes.io/managed-by: quarkus
+        app.openshift.io/runtime: quarkus
+        app.kubernetes.io/name: brix-common
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    spec:
+      containers:
+        - env:
+            - name: JAVA_APP_JAR
+              value: /deployments/quarkus-run.jar
+          image: brix-common:1.0.0-SNAPSHOT
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: brix-common
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          startupProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/started
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10

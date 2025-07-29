@@ -1,0 +1,13 @@
+com/ibm/brix/rest/GenAttrMapTest.class
+com/ibm/brix/rest/BRouteTest.class
+com/ibm/brix/rest/AttributePropertiesTest.class
+com/ibm/brix/rest/ActionCommandConfigTest.class
+com/ibm/brix/rest/GenValueMapTest.class
+com/ibm/brix/rest/ArtifactMapTest.class
+com/ibm/brix/rest/SEEndpointTest.class
+com/ibm/brix/rest/TransactionTest.class
+com/ibm/brix/rest/RuleActionConfigTest.class
+com/ibm/brix/rest/ArtifactRelationshipTest.class
+com/ibm/brix/rest/ArtifactTest.class
+com/ibm/brix/rest/RuleConditionTest.class
+com/ibm/brix/rest/RuleTest.class

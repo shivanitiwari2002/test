@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>BrIX Service Camel Application</name>
+    <description>Camel project that deploys the BrIX Service application</description>
+    <groupId>com.ibm.brix.service</groupId>
+    <artifactId>brix-app</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.ibm.brix</groupId>
+        <artifactId>brix-releng</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../brix-releng</relativePath>
+    </parent>
+
+    <dependencies>
+        <!-- BrIX libraries and Camel Components -->
+        <dependency>
+            <groupId>com.ibm.brix.common</groupId>
+            <artifactId>brix-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.brix.simpleendpoint</groupId>
+            <artifactId>brix-se</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-flyway</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application.properties</include>
+                    <include>brix.broutes.cfg</include>
+                    <include>brix.broutes.openshift.cfg</include>
+                    <include>brix.artifactRelationship.cfg</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>lib</directory>
+                <excludes>
+                    <exclude>jolokia*.*</exclude>
+                </excludes>
+                <targetPath>../lib</targetPath>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>com.ibm.brix.BrixMain</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>com.ibm.brix.BrixMain</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>assembly/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!--  mvn test -Dtest=<TestName>   OR     mvn test -->
+                <!--  including route coverage  -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!--  TODO: Enable to check route coverage -->
+                        <!--  <CamelTestRouteCoverage>true</CamelTestRouteCoverage> -->
+                    </systemPropertyVariables>
+                    <childDelegation>false</childDelegation>
+                    <useFile>true</useFile>
+                    <failIfNoTests>false</failIfNoTests>
+                    <!-- lets re-run the failed test one more time, just to be sure -->
+                    <!-- <rerunFailingTestsCount>2</rerunFailingTestsCount> -->
+                    <includes>
+                        <include>**/*Test*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <!--  mvn camel-report:route-coverage  -->
+            <!--  validate coverage -->
+            <plugin>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-report-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                            <logUnparseable>true</logUnparseable>
+                            <includeTest>true</includeTest>
+                            <!-- TODO: This fails when using toD() dynamic routing -->
+                            <directOrSedaPairCheck>false</directOrSedaPairCheck>
+                        </configuration>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <!-- this profile is active by default -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <persitence.profile></persitence.profile>
+            </properties>
+            <build>
+                <plugins>
+                <!-- Allows the example to be run via 'mvn compile exec:exec -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <configuration>
+                            <executable>java</executable>
+                            <mainClass>com.ibm.brix.BrixMain</mainClass>
+                            <addResourcesToClasspath>false</addResourcesToClasspath>
+                            <arguments>
+                                <!-- Enable remote debug agent, default to suspend=n -->
+                                <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000</argument>
+                                <!-- <argument>-javaagent:${user.home}/.m2/repository/org/apache/openjpa/openjpa/3.1.1/openjpa-3.1.1.jar</argument> -->
+                                <!-- Needed if Hawtio is external -->
+                                <!-- https://jolokia.org/reference/html/agents.html -->
+                                <!-- <argument>-javaagent:lib/jolokia-jvm-1.6.2-agent.jar=discoveryEnabled=true,systemPropertiesMode=override,host=0.0.0.0,port=8779</argument>-->
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>com.ibm.brix.BrixMain</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

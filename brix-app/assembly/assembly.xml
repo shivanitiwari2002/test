@@ -1,0 +1,41 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 http://maven.apache.org/xsd/assembly-2.2.0.xsd">
+<!--
+    <id>jar-with-dependencies</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+-->
+    <id>zip</id>
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <files>
+        <file>
+            <source> ${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+    </files>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>${project.groupId}:${project.artifactId}:jar:*</exclude>  <!-- Excludes the main jar from going to the lib dir -->
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>

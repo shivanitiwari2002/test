@@ -1,0 +1,2966 @@
+{
+  "openapi" : "3.1.0",
+  "components" : {
+    "schemas" : {
+      "ActionCommand" : {
+        "type" : "string",
+        "enum" : [ "CREATEARTIFACT", "CHANGESTATE", "MODIFYATTRIBUTE", "ADDCOMMENT", "ADDLINK", "REMOVELINK", "TRANSFER", "UNDEFINED" ]
+      },
+      "ActionCommandConfig" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "actionCommandConfigName" : {
+            "type" : "string"
+          },
+          "commandParamName" : {
+            "type" : "string"
+          },
+          "required" : {
+            "type" : "boolean"
+          },
+          "substituteString" : {
+            "type" : "string"
+          },
+          "defaultValue" : {
+            "type" : "string"
+          },
+          "commandParamType" : {
+            "$ref" : "#/components/schemas/PredicateType"
+          },
+          "commandParamPattern" : {
+            "type" : "string"
+          },
+          "commandParamOperator" : {
+            "$ref" : "#/components/schemas/RuleOperator"
+          },
+          "commandTraits" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "commandParamType" ]
+      },
+      "Artifact" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "auditTracker" : {
+            "$ref" : "#/components/schemas/AuditTracker"
+          },
+          "artifactType" : {
+            "$ref" : "#/components/schemas/ArtifactType"
+          },
+          "artifactKeyString" : {
+            "type" : "string"
+          },
+          "fullPath" : {
+            "type" : "string"
+          },
+          "endpoint" : {
+            "$ref" : "#/components/schemas/Endpoint"
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/AttributeProperties"
+            }
+          },
+          "artifactKey" : {
+            "$ref" : "#/components/schemas/ArtifactKey"
+          }
+        }
+      },
+      "ArtifactKey" : {
+        "type" : "object",
+        "properties" : {
+          "artifactKeyString" : {
+            "type" : "string"
+          },
+          "artifact" : {
+            "$ref" : "#/components/schemas/Artifact"
+          }
+        }
+      },
+      "ArtifactMap" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "artifactType" : {
+            "$ref" : "#/components/schemas/ArtifactType"
+          },
+          "mapType" : {
+            "$ref" : "#/components/schemas/ResourceSide"
+          },
+          "attributeMaps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GenAttrMap"
+            }
+          }
+        },
+        "required" : [ "artifactType", "mapType" ]
+      },
+      "ArtifactRelationship" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 255
+          },
+          "sourceArtifact" : {
+            "$ref" : "#/components/schemas/Artifact"
+          },
+          "targetArtifact" : {
+            "$ref" : "#/components/schemas/Artifact"
+          },
+          "state" : {
+            "$ref" : "#/components/schemas/State"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/Status"
+          },
+          "lastTransactionTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "sourceArtifactKeyString" : {
+            "type" : "string"
+          },
+          "targetArtifactKeyString" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ArtifactType" : {
+        "type" : "string",
+        "enum" : [ "SEISSUE", "GENERIC", "UNKNOWN" ]
+      },
+      "AttributeProperties" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "attributeValue" : { },
+          "attributeTraits" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "attributeType" : {
+            "$ref" : "#/components/schemas/AttributeType"
+          }
+        },
+        "required" : [ "attributeType" ]
+      },
+      "AttributeType" : {
+        "type" : "string",
+        "enum" : [ "STRING", "MULTILINE", "LONG", "DATE", "BOOLEAN", "IDENTITY", "ENUM", "MULTIVALUE", "UNKNOWN" ]
+      },
+      "AuditTracker" : {
+        "type" : "object",
+        "properties" : {
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          }
+        }
+      },
+      "BRoute" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "sourceEndpoint" : {
+            "$ref" : "#/components/schemas/Endpoint"
+          },
+          "sourceArtifactMaps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactMap"
+            }
+          },
+          "targetEndpoint" : {
+            "$ref" : "#/components/schemas/Endpoint"
+          },
+          "targetArtifactMaps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ArtifactMap"
+            }
+          },
+          "rules" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Rule"
+            }
+          }
+        }
+      },
+      "CollectorType" : {
+        "type" : "string",
+        "enum" : [ "WEBHOOK", "POLLING", "UNKNOWN" ]
+      },
+      "Credential" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Endpoint" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "auditTracker" : {
+            "$ref" : "#/components/schemas/AuditTracker"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "systemType" : {
+            "$ref" : "#/components/schemas/SystemType"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "credential" : {
+            "$ref" : "#/components/schemas/Credential"
+          },
+          "addressAsURI" : {
+            "type" : "string",
+            "format" : "uri"
+          },
+          "fetchArtifactURI" : {
+            "type" : "string"
+          },
+          "updateArtifactURI" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "systemType", "address" ]
+      },
+      "GenAttrMap" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "attributeName" : {
+            "type" : "string"
+          },
+          "attributeType" : {
+            "$ref" : "#/components/schemas/AttributeType"
+          },
+          "genericName" : {
+            "type" : "string"
+          },
+          "attributeTraits" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "toGenericValueMap" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GenValueMap"
+            }
+          },
+          "fromGenericValueMap" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GenValueMap"
+            }
+          }
+        },
+        "required" : [ "attributeType" ]
+      },
+      "GenValueMap" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "genAttrId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "resourceSide" : {
+            "$ref" : "#/components/schemas/ResourceSide"
+          },
+          "attributeValue" : {
+            "type" : "string"
+          },
+          "genericValue" : {
+            "type" : "string"
+          },
+          "order" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "resourceSide" ]
+      },
+      "Instant" : {
+        "type" : "string",
+        "format" : "date-time",
+        "examples" : [ "2022-03-10T16:15:50Z" ]
+      },
+      "PredicateType" : {
+        "type" : "string",
+        "enum" : [ "ATTRIBUTE", "EXCHANGEHEADER", "CLASS", "UNDEFINED" ]
+      },
+      "ResourceSide" : {
+        "type" : "string",
+        "enum" : [ "SOURCE", "TARGET", "UNKNOWN" ]
+      },
+      "Rule" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "ruleName" : {
+            "type" : "string"
+          },
+          "ruleDescription" : {
+            "type" : "string"
+          },
+          "sequence" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "ruleConditions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleCondition"
+            }
+          },
+          "ruleActionConfigs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleActionConfig"
+            }
+          }
+        }
+      },
+      "RuleActionConfig" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "actionConfigName" : {
+            "type" : "string"
+          },
+          "actionConfigDescription" : {
+            "type" : "string"
+          },
+          "actionSequence" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "actionCommand" : {
+            "$ref" : "#/components/schemas/ActionCommand"
+          },
+          "resourceSide" : {
+            "$ref" : "#/components/schemas/ResourceSide"
+          },
+          "actionClass" : {
+            "type" : "string"
+          },
+          "actionMethod" : {
+            "type" : "string"
+          },
+          "actionCommandConfig" : {
+            "$ref" : "#/components/schemas/ActionCommandConfig"
+          }
+        },
+        "required" : [ "actionCommand" ]
+      },
+      "RuleCondition" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "sequence" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "predicateSubject" : {
+            "type" : "string"
+          },
+          "predicateType" : {
+            "$ref" : "#/components/schemas/PredicateType"
+          },
+          "predicatePattern" : {
+            "type" : "string"
+          },
+          "ruleConditionOperator" : {
+            "$ref" : "#/components/schemas/RuleOperator"
+          },
+          "resourceSide" : {
+            "$ref" : "#/components/schemas/ResourceSide"
+          }
+        }
+      },
+      "RuleOperator" : {
+        "type" : "string",
+        "enum" : [ "EXISTS", "NOTEXISTS", "EQUALS", "EQUALSIGNORECASE", "NOTEQUALS", "CONTAINS", "NOTCONTAINS", "TRUE", "FALSE", "EMPTY", "NOTEMPTY", "MATCHREGEX", "UNDEFINED" ]
+      },
+      "SEEndpoint" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "auditTracker" : {
+            "$ref" : "#/components/schemas/AuditTracker"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "systemType" : {
+            "$ref" : "#/components/schemas/SystemType"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "credential" : {
+            "$ref" : "#/components/schemas/Credential"
+          },
+          "addressAsURI" : {
+            "type" : "string",
+            "format" : "uri"
+          },
+          "fetchArtifactURI" : {
+            "type" : "string"
+          },
+          "updateArtifactURI" : {
+            "type" : "string"
+          },
+          "credentialParams" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "systemType", "address" ]
+      },
+      "State" : {
+        "type" : "string",
+        "enum" : [ "INITIALIZED", "ACTIVE", "INACTIVE", "ARCHIVED" ]
+      },
+      "Status" : {
+        "type" : "string",
+        "enum" : [ "INITIALIZED", "QUEUED", "INPROGRESS", "ERROR", "COMPLETED" ]
+      },
+      "SystemType" : {
+        "type" : "string",
+        "enum" : [ "SIMPLEEP", "UNKNOWN" ]
+      },
+      "Trait" : {
+        "type" : "string",
+        "enum" : [ "PATTERN", "CLASS", "MAXLEN", "REQUIRED", "DEFAULTVALUE", "COMPOSE", "GROUP" ]
+      },
+      "Transaction" : {
+        "type" : "object",
+        "properties" : {
+          "persistent" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "updateTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "trxId" : {
+            "type" : "string",
+            "maxLength" : 50
+          },
+          "groupId" : {
+            "type" : "string"
+          },
+          "payload" : {
+            "type" : "string",
+            "maxLength" : 150000
+          },
+          "artifact" : {
+            "$ref" : "#/components/schemas/Artifact"
+          },
+          "lastRetryTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "completedTime" : {
+            "$ref" : "#/components/schemas/Instant"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/Status"
+          },
+          "statusMessage" : {
+            "type" : "string",
+            "maxLength" : 3000
+          },
+          "broute" : {
+            "$ref" : "#/components/schemas/BRoute"
+          },
+          "artifactRelationship" : {
+            "$ref" : "#/components/schemas/ArtifactRelationship"
+          },
+          "retryCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "lastMessage" : {
+            "type" : "string"
+          },
+          "collectorType" : {
+            "$ref" : "#/components/schemas/CollectorType"
+          }
+        }
+      }
+    }
+  },
+  "paths" : {
+    "/api/actioncommandconfigs" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ActionCommandConfig"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Action Command Config Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ActionCommandConfig"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Action Command Config Resource" ]
+      }
+    },
+    "/api/actioncommandconfigs/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ActionCommandConfig"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Action Command Config Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get By Id",
+        "tags" : [ "Action Command Config Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Action Command Config Resource" ]
+      }
+    },
+    "/api/actioncommands" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ActionCommand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "Action Command Resource" ]
+      }
+    },
+    "/api/actioncommands/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Action Command Resource" ]
+      }
+    },
+    "/api/artifactmaps" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ArtifactMap"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Artifact Map Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ArtifactMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Artifact Map Resource" ]
+      }
+    },
+    "/api/artifactmaps/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Artifact Map Resource" ]
+      }
+    },
+    "/api/artifactmaps/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ArtifactMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactMap"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Artifact Map Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactMap"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Artifact Map Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Artifact Map Resource" ]
+      }
+    },
+    "/api/artifactrelationships" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ArtifactRelationship"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Artifact Relationship Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ArtifactRelationship"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Artifact Relationship Resource" ]
+      }
+    },
+    "/api/artifactrelationships/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Artifact Relationship Resource" ]
+      }
+    },
+    "/api/artifactrelationships/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ArtifactRelationship"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactRelationship"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Artifact Relationship Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArtifactRelationship"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Artifact Relationship Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Artifact Relationship Resource" ]
+      }
+    },
+    "/api/artifacts" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Artifact"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Artifact Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Artifact"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Artifact Resource" ]
+      }
+    },
+    "/api/artifacts/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Artifact Resource" ]
+      }
+    },
+    "/api/artifacts/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Artifact"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Artifact"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Artifact Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Artifact"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Artifact Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Artifact Resource" ]
+      }
+    },
+    "/api/artifacttypes" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ArtifactType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "Artifact Type Resource" ]
+      }
+    },
+    "/api/artifacttypes/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Artifact Type Resource" ]
+      }
+    },
+    "/api/attributeproperties" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AttributeProperties"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Attribute Properties Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AttributeProperties"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Attribute Properties Resource" ]
+      }
+    },
+    "/api/attributeproperties/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Attribute Properties Resource" ]
+      }
+    },
+    "/api/attributeproperties/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AttributeProperties"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AttributeProperties"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Attribute Properties Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AttributeProperties"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Attribute Properties Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Attribute Properties Resource" ]
+      }
+    },
+    "/api/attributetypes" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AttributeType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All Attribute Type",
+        "tags" : [ "Attribute Type Resource" ]
+      }
+    },
+    "/api/attributetypes/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Attribute Type Resource" ]
+      }
+    },
+    "/api/broutes" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BRoute"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "B Route Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BRoute"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "B Route Resource" ]
+      }
+    },
+    "/api/broutes/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "B Route Resource" ]
+      }
+    },
+    "/api/broutes/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BRoute"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BRoute"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "B Route Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BRoute"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "B Route Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "B Route Resource" ]
+      }
+    },
+    "/api/endpoints" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Endpoint"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Endpoint Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SEEndpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Endpoint Resource" ]
+      }
+    },
+    "/api/endpoints/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Endpoint Resource" ]
+      }
+    },
+    "/api/endpoints/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Endpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Endpoint"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Endpoint Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Endpoint"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Endpoint Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Endpoint Resource" ]
+      }
+    },
+    "/api/gen-value-maps" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GenValueMap"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Get All",
+        "tags" : [ "Gen Value Map Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GenValueMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Gen Value Map Resource" ]
+      }
+    },
+    "/api/gen-value-maps/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GenValueMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Gen Value Map Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get By Id",
+        "tags" : [ "Gen Value Map Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Gen Value Map Resource" ]
+      }
+    },
+    "/api/genattrmaps" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GenAttrMap"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Gen Attr Map Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GenAttrMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Gen Attr Map Resource" ]
+      }
+    },
+    "/api/genattrmaps/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Gen Attr Map Resource" ]
+      }
+    },
+    "/api/genattrmaps/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GenAttrMap"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenAttrMap"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Gen Attr Map Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenAttrMap"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Gen Attr Map Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Gen Attr Map Resource" ]
+      }
+    },
+    "/api/predicatetypes" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PredicateType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "Predicate Type Resource" ]
+      }
+    },
+    "/api/predicatetypes/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Predicate Type Resource" ]
+      }
+    },
+    "/api/resourcesides" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ResourceSide"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "Resource Side Resource" ]
+      }
+    },
+    "/api/resourcesides/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Resource Side Resource" ]
+      }
+    },
+    "/api/ruleactionconfigs" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RuleActionConfig"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Rule Action Config Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleActionConfig"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Rule Action Config Resource" ]
+      }
+    },
+    "/api/ruleactionconfigs/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleActionConfig"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Rule Action Config Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get By Id",
+        "tags" : [ "Rule Action Config Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Rule Action Config Resource" ]
+      }
+    },
+    "/api/ruleconditions" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RuleCondition"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Rule Condition Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleCondition"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Rule Condition Resource" ]
+      }
+    },
+    "/api/ruleconditions/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleCondition"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Rule Condition Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get By Id",
+        "tags" : [ "Rule Condition Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Rule Condition Resource" ]
+      }
+    },
+    "/api/ruleoperators" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RuleOperator"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "Rule Operator Resource" ]
+      }
+    },
+    "/api/ruleoperators/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Rule Operator Resource" ]
+      }
+    },
+    "/api/rules" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Rule"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All Rules",
+        "tags" : [ "Rule Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Rule"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create Rule",
+        "tags" : [ "Rule Resource" ]
+      }
+    },
+    "/api/rules/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Rule Resource" ]
+      }
+    },
+    "/api/rules/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Rule"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rule"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update Rule",
+        "tags" : [ "Rule Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rule"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find Rule By Id",
+        "tags" : [ "Rule Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Rule Resource" ]
+      }
+    },
+    "/api/seendpoints" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SEEndpoint"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "SE Endpoint Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SEEndpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "SE Endpoint Resource" ]
+      }
+    },
+    "/api/seendpoints/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "SE Endpoint Resource" ]
+      }
+    },
+    "/api/seendpoints/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SEEndpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "SE Endpoint Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SEEndpoint"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Get By Id",
+        "tags" : [ "SE Endpoint Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "SE Endpoint Resource" ]
+      }
+    },
+    "/api/states" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/State"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All State",
+        "tags" : [ "State Resource" ]
+      }
+    },
+    "/api/states/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "State Resource" ]
+      }
+    },
+    "/api/statuses" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All Status",
+        "tags" : [ "Status Resource" ]
+      }
+    },
+    "/api/statuses/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Status Resource" ]
+      }
+    },
+    "/api/systemtypes" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SystemType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All System Type",
+        "tags" : [ "System Type Resource" ]
+      }
+    },
+    "/api/systemtypes/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "System Type Resource" ]
+      }
+    },
+    "/api/traits" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Trait"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All Trait",
+        "tags" : [ "Trait Resource" ]
+      }
+    },
+    "/api/traits/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Trait Resource" ]
+      }
+    },
+    "/api/transactions" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "List All",
+        "tags" : [ "Transaction Resource" ]
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create",
+        "tags" : [ "Transaction Resource" ]
+      }
+    },
+    "/api/transactions/count" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Count",
+        "tags" : [ "Transaction Resource" ]
+      }
+    },
+    "/api/transactions/retrycount/{count}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "count",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Retry Count Equals",
+        "tags" : [ "Transaction Resource" ]
+      }
+    },
+    "/api/transactions/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update",
+        "tags" : [ "Transaction Resource" ]
+      },
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Transaction"
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Find By Id",
+        "tags" : [ "Transaction Resource" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "summary" : "Delete",
+        "tags" : [ "Transaction Resource" ]
+      }
+    }
+  },
+  "info" : {
+    "title" : "brix-restapi API",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8088",
+    "description" : "Auto generated value"
+  }, {
+    "url" : "http://0.0.0.0:8088",
+    "description" : "Auto generated value"
+  } ]
+}
